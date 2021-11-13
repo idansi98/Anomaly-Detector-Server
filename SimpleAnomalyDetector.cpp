@@ -13,6 +13,8 @@
 #include <vector>
 //#include <string>
 #include <algorithm>
+#include <unordered_set>
+
 
 SimpleAnomalyDetector::SimpleAnomalyDetector() {
     //TODO Auto-generated constructor stub
@@ -23,10 +25,11 @@ SimpleAnomalyDetector::~SimpleAnomalyDetector() {
 }
 
 Point** SimpleAnomalyDetector::toPoints(vector <float> a, vector <float> b) {
-    Point **points = new Point *[a.size()];
+    Point **points = new Point* [a.size()];
     for (int i = 0; i < a.size(); i++) {
         points[i] = new Point(a[i], b[i]);
     }
+    return points;
 }
 
 float SimpleAnomalyDetector::findThreshold(Point **points, int num, Line line) {
@@ -70,30 +73,39 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts) {
                                       ts.getColumn(cf[i].feature2));
             cf[i].lin_reg = linear_reg(points, ts.getRowCount());
             cf[i].threshold = 1.1 * findThreshold(points, ts.getRowCount(), cf[i].lin_reg);
-            correlatedFeas.push_back(cf[i]);
+            if (&correlatedFeas[0] == nullptr) {
+                correlatedFeas.push_back(cf[i]);
+            }
+            int len = correlatedFeas.size();
+            int i = 1;
+            for (correlatedFeatures c:correlatedFeas) {
+                if ((!c.feature1.compare(cf[i].feature1)) && (!c.feature1.compare(cf[i].feature2))) {
+                    break;
+                }
+                if (i == len) {
+                    correlatedFeas.push_back(cf[i]);
+                }
+            }
         }
     }
 }
 
 vector<AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries& ts) {
-    /*
-    vector<AnomalyReport> v;
-    for_each(cf.begin(),cf.end(),[&v,&ts,this](correlatedFeatures c){
-        vector<float> x=ts.getAttributeData(c.feature1);
-        vector<float> y=ts.getAttributeData(c.feature2);
-        for(size_t i=0;i<x.size();i++){
-            Point p =Point(x[i],y[i]);
-            if(c.corrlation>0.9){
-                if(isAnomalous(x[i],y[i],c)){
-                    string d=c.feature1 + "-" + c.feature2;
-                    v.push_back(AnomalyReport(d,(i+1)));
+    /*vector<AnomalyReport> v;
+    for_each(correlatedFeas.begin(), correlatedFeas.end(),[&v, &ts, this](correlatedFeatures c) {
+        vector<float> x = ts.getColumn(c.feature1);
+        vector<float> y = ts.getColumn(c.feature2);
+        for (int i = 0; i < x.size(); i++) {
+            Point p = Point(x[i], y[i]);
+            if (c.corrlation > threshold) {
+                if (isAnomal(x[i], y[i], c)) {
+                    string s = c.feature1 + "-" + c.feature2;
+                    v.push_back(AnomalyReport(s, (i + 1)));
                 }
-            }
-            else{
-                if(distance(p,Point(c.x,c.y))>c.threshold){
-                    string d=c.feature1 + "-" + c.feature2;
-                    v.push_back(AnomalyReport(d,(i+1)));
-                }
+            } else {
+                string d = c.feature1 + "-" + c.feature2;
+                v.push_back(AnomalyReport(d, (i + 1)));
+
             }
         }
     });
