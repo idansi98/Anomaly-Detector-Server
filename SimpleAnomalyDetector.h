@@ -23,6 +23,7 @@ protected:
     float threshold = 0.9;
     vector<correlatedFeatures> correlatedFeas;
 public:
+    bool isContainedInCorrelatedFeas(correlatedFeatures featurePair);
     SimpleAnomalyDetector();
     virtual ~SimpleAnomalyDetector();
     virtual void learnNormal(const TimeSeries& ts);

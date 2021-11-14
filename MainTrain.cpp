@@ -59,7 +59,8 @@ void checkCorrelationTrain(correlatedFeatures c,string f1, string f2, float a, f
 
 }
 
-int main(){
+int main(){\
+    cout <<"MAIN";
     srand (time(NULL));
     float a1=1+rand()%10, b1=-50+rand()%100;
     float a2=1+rand()%20 , b2=-50+rand()%100;
@@ -72,42 +73,41 @@ int main(){
 
     generateTrainCSV(a1,b1,a2,b2);
     TimeSeries ts("trainFile1.csv");
-    std::cout << ts;
+
     SimpleAnomalyDetector ad;
     ad.learnNormal(ts);
     vector<correlatedFeatures> cf=ad.getNormalModel();
-
     if(cf.size()!=2)
         cout<<"wrong size of correlated features (-40)"<<endl;
     else
-        for_each(cf.begin(),cf.end(),[&a1,&b1,&a2,&b2](correlatedFeatures c){
-            checkCorrelationTrain(c,"A","C",a1,b1); // 20 points
-            checkCorrelationTrain(c,"B","D",a2,b2); // 20 points
-        });
+      for_each(cf.begin(),cf.end(),[&a1,&b1,&a2,&b2](correlatedFeatures c){
+          checkCorrelationTrain(c,"A","C",a1,b1); // 20 points
+          checkCorrelationTrain(c,"B","D",a2,b2); // 20 points
+      });
 
-    // test the anomaly detector: (60 points)
-    // one simply anomaly is injected to the data
-    int anomaly=5+rand()%90; // one anomaly injected in a random time step
-    generateTestCSV(a1,b1,a2,b2,anomaly);
-    TimeSeries ts2("testFile1.csv");
-    vector<AnomalyReport> r = ad.detect(ts2);
+  // test the anomaly detector: (60 points)
+  // one simply anomaly is injected to the data
+  int anomaly=5+rand()%90; // one anomaly injected in a random time step
+  generateTestCSV(a1,b1,a2,b2,anomaly);
 
-    bool anomlyDetected=false;
-    int falseAlarms=0;
-    for_each(r.begin(),r.end(),[&anomaly,&anomlyDetected,&falseAlarms](AnomalyReport ar){
-        if(ar.description=="A-C" && ar.timeStep == anomaly)
-            anomlyDetected=true;
-        else
-            falseAlarms++;
-    });
+  TimeSeries ts2("testFile1.csv");
+  vector<AnomalyReport> r = ad.detect(ts2);
+  bool anomlyDetected=false;
+  int falseAlarms=0;
+  for_each(r.begin(),r.end(),[&anomaly,&anomlyDetected,&falseAlarms](AnomalyReport ar){
+      if(ar.description=="A-C" && ar.timeStep == anomaly)
+          anomlyDetected=true;
+      else
+          falseAlarms++;
+  });
 
-    if(!anomlyDetected)
-        cout<<"the anomaly was not detected (-30)"<<endl;
+  if(!anomlyDetected)
+      cout<<"the anomaly was not detected (-30)"<<endl;
+  if(falseAlarms>0)
+      cout<<"you have "<<falseAlarms<<" false alarms (-"<<min(30,falseAlarms*3)<<")"<<endl;
 
-    if(falseAlarms>0)
-        cout<<"you have "<<falseAlarms<<" false alarms (-"<<min(30,falseAlarms*3)<<")"<<endl;
+  cout<<"done"<<endl;
+  return 0;
 
-    cout<<"done"<<endl;
-    return 0;
 }
 

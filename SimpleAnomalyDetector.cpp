@@ -33,15 +33,28 @@ Point** SimpleAnomalyDetector::toPoints(vector <float> a, vector <float> b) {
 }
 
 float SimpleAnomalyDetector::findThreshold(Point **points, int num, Line line) {
-    float m = 0;
+    float maxDistance = 0;
     for (int i = 0; i < num; i++) {
-        float distance = std::abs(points[i]->y - line.f(points[i]->x));
-        if (distance > m)
-            m = distance;
+      Point *point = points[i];
+        float distance = std::abs(point->y - line.f(point->x));
+        if (distance > maxDistance)
+          maxDistance = distance;
     }
-    return m;
+    return maxDistance;
 }
 
+bool SimpleAnomalyDetector::isContainedInCorrelatedFeas(correlatedFeatures featurePair) {
+
+    for (correlatedFeatures featuresInStorage: correlatedFeas) {
+    bool isFirstElementTheSame = !(featuresInStorage.feature1.compare(featurePair.feature1));
+    bool isSecondElementTheSame = !(featuresInStorage.feature2.compare(featurePair.feature2));
+    if (isFirstElementTheSame && isSecondElementTheSame) {
+      return true;
+    }
+  }
+  return false;
+
+}
 void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts) {
     // consts
     const int columnCount = ts.getColumnCount();
@@ -52,6 +65,10 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts) {
     for (int i = 0; i < columnCount; ++i) {
         cf[i].correlation = 0;
     }
+    //TODO: make this into a separate function
+
+    // get features from ts (ONCE)
+    std::vector<std::string> featuresVector =  ts.getFeatures();
     // for each column i
     for (int i = 0; i < columnCount; i++) {
         // the best correlation
@@ -69,14 +86,14 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts) {
               // if column i found a new friend
                 if (correlation > cf[i].correlation) {
                     cf[i].correlation = correlation;
-                    cf[i].feature1 = ts.getFeature(i);
-                    cf[i].feature2 = ts.getFeature(j);
+                    cf[i].feature1 = featuresVector[i];
+                    cf[i].feature2 = featuresVector[j];
                 }
                 // if column j found a new friend
                 if (correlation > cf[j].correlation) {
                     cf[j].correlation = correlation;
-                    cf[j].feature1 = ts.getFeature(i);
-                    cf[j].feature2 = ts.getFeature(j);
+                    cf[j].feature1 = featuresVector[i];
+                    cf[j].feature2 = featuresVector[j];
                 }
             }
         }
@@ -93,45 +110,33 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts) {
             cf[i].lin_reg = linear_reg(points, rowCount);
             cf[i].threshold = 1.1f * findThreshold(points, rowCount, cf[i].lin_reg);
 
-            if (&correlatedFeas[0] == nullptr) {
-                correlatedFeas.push_back(cf[i]);
-            }
-            int len = correlatedFeas.size();
-            int i = 1;
-            for (correlatedFeatures c:correlatedFeas) {
-                if ((!c.feature1.compare(cf[i].feature1)) && (!c.feature1.compare(cf[i].feature2))) {
-                    break;
-                }
-                if (i == len) {
-                    correlatedFeas.push_back(cf[i]);
-                }
+
+          if (!isContainedInCorrelatedFeas(cf[i])) {
+              correlatedFeas.push_back(cf[i]);
             }
         }
     }
 }
 
 vector<AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries& ts) {
-    /*vector<AnomalyReport> v;
+    vector<AnomalyReport> v;
+    // for each pair of correlations:
     for_each(correlatedFeas.begin(), correlatedFeas.end(),[&v, &ts, this](correlatedFeatures c) {
-        vector<float> x = ts.getColumn(c.feature1);
-        vector<float> y = ts.getColumn(c.feature2);
-        for (int i = 0; i < x.size(); i++) {
-            Point p = Point(x[i], y[i]);
-            if (c.corrlation > threshold) {
-                if (isAnomal(x[i], y[i], c)) {
-                    string s = c.feature1 + "-" + c.feature2;
-                    v.push_back(AnomalyReport(s, (i + 1)));
-                }
-            } else {
-                string d = c.feature1 + "-" + c.feature2;
-                v.push_back(AnomalyReport(d, (i + 1)));
-
-            }
+      // get both columns
+        vector<float> firstColumn = ts.getColumn(c.feature1);
+        vector<float> secondColumn = ts.getColumn(c.feature2);
+        // for each value pair in the columns
+        for (int i = 0; i < firstColumn.size(); i++) {
+          if (isAnomal(firstColumn[i], secondColumn[i], c)) {
+            string s = c.feature1 + "-" + c.feature2;
+            v.push_back(AnomalyReport(s, i + 1));
+          }
         }
     });
-    return v;*/
+    return v;
 }
 
 bool SimpleAnomalyDetector::isAnomal(float x, float y, correlatedFeatures cf){
-    return (std::abs(y - cf.lin_reg.f(x) )> cf.threshold);
+  //cout << "DEV: " << std::abs(dev(Point(x,y),cf.lin_reg)) << " THRESHOLD: " << cf.threshold << endl;
+  return (std::abs(dev(Point(x,y),cf.lin_reg)) > cf.threshold);
 }
