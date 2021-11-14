@@ -94,8 +94,10 @@ void TimeSeries::initVectors() {
 
 std::ostream& operator <<(std::ostream &out, const TimeSeries &time_series) {
     for(std::string str: time_series.features) {
-        out << "FEATURE: " << str << std::endl;
+        out << "FEATURE: " << str ;
         const std::vector<float> values = time_series.getColumn(str);
+        const int sizeOfColumn = values.size();
+        out << " (" << sizeOfColumn <<")" << std::endl;
         for(double value: values) {
             out << value << std::endl;
         }

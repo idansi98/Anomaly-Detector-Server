@@ -72,6 +72,7 @@ int main(){
 
     generateTrainCSV(a1,b1,a2,b2);
     TimeSeries ts("trainFile1.csv");
+    std::cout << ts;
     SimpleAnomalyDetector ad;
     ad.learnNormal(ts);
     vector<correlatedFeatures> cf=ad.getNormalModel();
