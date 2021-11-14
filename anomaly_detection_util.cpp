@@ -47,6 +47,7 @@ float cov(const float* x, const float* y, int size) {
     return covariance;
 }
 
+//check
 // returns the Pearson correlation coefficient of X and Y
 float pearson(const float* x, const float* y, int size) {
     return cov(x, y, size) / (std::sqrt(var(x, size)) * std::sqrt(var(y, size)));
