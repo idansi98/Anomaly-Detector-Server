@@ -46,12 +46,12 @@ void checkCorrelationTrain(correlatedFeatures c,string f1, string f2, float a, f
         if(c.feature2!=f2)
             cout<<"wrong correlated feature of "<<f1<<" (-20)"<<endl;
         else{
-            if(c.corrlation<0.99)
+            if(c.correlation<0.99)
                 cout<<f1<<"-"<<f2<<" wrong correlation detected (-5)"<<endl;
             if(c.lin_reg.a<a-0.5f || c.lin_reg.a>a+0.5f)
-                cout<<f1<<"-"<<f2<<" wrong value of line_reg.a (-5)"<<endl;
+                cout<<f1<<"-"<<f2<<" wrong value of line_reg.a (-5)" << " got: " << c.lin_reg.a <<endl;
             if(c.lin_reg.b<b-0.5f || c.lin_reg.b>b+0.5f)
-                cout<<f1<<"-"<<f2<<" wrong value of line_reg.b (-5)"<<endl;
+                cout<<f1<<"-"<<f2<<" wrong value of line_reg.b (-5)" << " got: " << c.lin_reg.b<<endl ;
             if(c.threshold>0.3)
                 cout<<f1<<"-"<<f2<<" wrong threshold detected (-5)"<<endl;
         }

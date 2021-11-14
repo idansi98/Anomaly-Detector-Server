@@ -43,36 +43,56 @@ float SimpleAnomalyDetector::findThreshold(Point **points, int num, Line line) {
 }
 
 void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts) {
-    correlatedFeatures cf[ts.getColumnCount()];
-    for (int i = 0; i < ts.getColumnCount(); ++i) {
-        cf[i].corrlation = 0;
+    // consts
+    const int columnCount = ts.getColumnCount();
+    const int rowCount = ts.getRowCount();
+    // create a correlated features array
+    correlatedFeatures cf[columnCount];
+    // reset default correlation to be 0
+    for (int i = 0; i < columnCount; ++i) {
+        cf[i].correlation = 0;
     }
-    for (int i = 0; i < ts.getColumnCount(); ++i) {
-        float m = 0;
-        int c = -1;
-        for (int j = (i + 1); j < ts.getColumnCount(); ++j) {
-            float f = (std::abs(pearson(&ts.getColumn(i)[0], &ts.getColumn(j)[0], ts.getRowCount())));
-            if (f > m) {
-                m = f, c = j;
-                if (f > cf[i].corrlation) {
-                    cf[i].corrlation = f;
+    // for each column i
+    for (int i = 0; i < columnCount; i++) {
+        // the best correlation
+        float bestCorrelation = 0;
+        // the index to the column of the most correlating column
+        int correlationFriend = -1;
+        // for each column j>i
+        for (int j = (i + 1); j < columnCount; ++j) {
+          // get correlation from columns i:j
+            float correlation = (std::abs(pearson(&ts.getColumn(i)[0], &ts.getColumn(j)[0], ts.getRowCount())));
+            // if correlation is higher than previous correlations -> swap it
+            if (correlation > bestCorrelation) {
+              bestCorrelation = correlation;
+              correlationFriend = j;
+              // if column i found a new friend
+                if (correlation > cf[i].correlation) {
+                    cf[i].correlation = correlation;
                     cf[i].feature1 = ts.getFeature(i);
                     cf[i].feature2 = ts.getFeature(j);
                 }
-                if (f > cf[j].corrlation) {
-                    cf[j].corrlation = f;
+                // if column j found a new friend
+                if (correlation > cf[j].correlation) {
+                    cf[j].correlation = correlation;
                     cf[j].feature1 = ts.getFeature(i);
                     cf[j].feature2 = ts.getFeature(j);
                 }
             }
         }
     }
-    for (int i = 0; i < ts.getColumnCount(); ++i) {
-        if (cf[i].corrlation >= threshold) {
+    // if here: done getting most correlating pairs + correlation number
+
+    //for all columns of pairs:
+    for (int i = 0; i < columnCount; ++i) {
+      // if correlation is high enough -> make it into an array of points.
+        if (cf[i].correlation >= threshold) {
             Point **points = toPoints(ts.getColumn(cf[i].feature1),
                                       ts.getColumn(cf[i].feature2));
-            cf[i].lin_reg = linear_reg(points, ts.getRowCount());
-            cf[i].threshold = 1.1 * findThreshold(points, ts.getRowCount(), cf[i].lin_reg);
+            //  get the linear regression + threshold of points and put it in cf
+            cf[i].lin_reg = linear_reg(points, rowCount);
+            cf[i].threshold = 1.1f * findThreshold(points, rowCount, cf[i].lin_reg);
+
             if (&correlatedFeas[0] == nullptr) {
                 correlatedFeas.push_back(cf[i]);
             }
