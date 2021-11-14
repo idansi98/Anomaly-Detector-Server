@@ -46,7 +46,10 @@ void checkCorrelationTrain(correlatedFeatures c,string f1, string f2, float a, f
         if(c.feature2!=f2)
             cout<<"wrong correlated feature of "<<f1<<" (-20)"<<endl;
         else{
-            if(c.correlation<0.99)
+          //  cout << "line_reg.a = " << c.lin_reg.a << endl;
+           // cout << "line_reg.b = " << c.lin_reg.b << endl;
+
+          if(c.correlation<0.99)
                 cout<<f1<<"-"<<f2<<" wrong correlation detected (-5)"<<endl;
             if(c.lin_reg.a<a-0.5f || c.lin_reg.a>a+0.5f)
                 cout<<f1<<"-"<<f2<<" wrong value of line_reg.a (-5)" << " got: " << c.lin_reg.a <<endl;
@@ -60,7 +63,6 @@ void checkCorrelationTrain(correlatedFeatures c,string f1, string f2, float a, f
 }
 
 int main(){\
-    cout <<"MAIN";
     srand (time(NULL));
     float a1=1+rand()%10, b1=-50+rand()%100;
     float a2=1+rand()%20 , b2=-50+rand()%100;
