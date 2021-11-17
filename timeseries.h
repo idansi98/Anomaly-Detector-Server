@@ -51,6 +51,7 @@ public:
     int getColumnCount() const {
         return features.size();
     }
+    // for debug purposes
     friend std::ostream& operator << (std::ostream& out, const TimeSeries& time_series);
 };
 

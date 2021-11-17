@@ -1,8 +1,8 @@
 /*
  * SimpleAnomalyDetector.cpp
  *
- * Authors:  206821258 Idan Simai
- *           206534299 Ido Tziony
+ * Authors:  206534299 Ido Tziony
+ *           206821258 Idan Simai
  *
  */
 
@@ -24,6 +24,7 @@ SimpleAnomalyDetector::~SimpleAnomalyDetector() {
     //TODO Auto-generated destructor stub
 }
 
+// gets 2 float vectors, and returns a vector of points
 Point** SimpleAnomalyDetector::toPoints(vector <float> a, vector <float> b) {
     int size = a.size();
     Point **points = new Point* [size];
@@ -33,6 +34,7 @@ Point** SimpleAnomalyDetector::toPoints(vector <float> a, vector <float> b) {
     return points;
 }
 
+// finds the threshold out of an array of points[num] in relation to a line
 float SimpleAnomalyDetector::findThreshold(Point **points, int num, Line line) {
     float maxDistance = 0;
     for (int i = 0; i < num; i++) {
@@ -43,10 +45,9 @@ float SimpleAnomalyDetector::findThreshold(Point **points, int num, Line line) {
     }
     return maxDistance;
 }
-
+// true: feature already exists in object
 bool SimpleAnomalyDetector::isContainedInCorrelatedFeas(correlatedFeatures featurePair) {
-
-    for (correlatedFeatures featuresInStorage: correlatedFeas) {
+    for (const correlatedFeatures& featuresInStorage: correlatedFeas) {
     bool isFirstElementTheSame = !(featuresInStorage.feature1.compare(featurePair.feature1));
     bool isSecondElementTheSame = !(featuresInStorage.feature2.compare(featurePair.feature2));
     if (isFirstElementTheSame && isSecondElementTheSame) {
@@ -54,8 +55,8 @@ bool SimpleAnomalyDetector::isContainedInCorrelatedFeas(correlatedFeatures featu
     }
   }
   return false;
-
 }
+// learns and initializes correlatedFeas from the given TimeSeries object
 void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts) {
     // consts
     const int columnCount = ts.getColumnCount();
@@ -109,16 +110,14 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts) {
                                       ts.getColumn(cf[i].feature2));
             //  get the linear regression + threshold of points and put it in cf
             cf[i].lin_reg = linear_reg(points, rowCount);
-            cf[i].threshold = 1.1f * findThreshold(points, rowCount, cf[i].lin_reg);
-
-
+            cf[i].threshold = 1.15f * findThreshold(points, rowCount, cf[i].lin_reg);
           if (!isContainedInCorrelatedFeas(cf[i])) {
               correlatedFeas.push_back(cf[i]);
             }
         }
     }
 }
-
+// returns a vector of all anomalies in given TimeSeries ts (based on prev. learned data)
 vector<AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries& ts) {
     vector<AnomalyReport> v;
     // for each pair of correlations:
@@ -136,9 +135,8 @@ vector<AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries& ts) {
     });
     return v;
 }
-
+// checks if a given point - represented as (x,y), is an anomaly in relation to the expected line produced by cf.
 bool SimpleAnomalyDetector::isAnomal(float x, float y, correlatedFeatures cf){
-  //cout << "DEV: " << std::abs(dev(Point(x,y),cf.lin_reg)) << " THRESHOLD: " << cf.threshold << endl;
   return (std::abs(dev(Point(x,y),cf.lin_reg)) > cf.threshold);
 }
 /*

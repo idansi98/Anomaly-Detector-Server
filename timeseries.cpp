@@ -1,8 +1,8 @@
 /*
  * timeseries.cpp
  *
- * Authors:  206821258 Idan Simai
- *           206534299 Ido Tziony
+ * Authors:  206534299 Ido Tziony
+ *           206821258 Idan Simai
  *
  */
 //TODO: Add try/catch/exceptions
@@ -30,7 +30,7 @@ TimeSeries::TimeSeries(const char *csvFileName) : fileReader(), featureMap(), fe
     initVectors();
 }
 
-
+// returns an array of strings after reading 1 line from the file
 std::vector<std::string> TimeSeries::readLine(bool firstTime) {
     std::vector<std::string> words;
 
@@ -71,6 +71,7 @@ void TimeSeries::initMap() {
     }
 }
 
+// fills the value vectors correlating to the features based on lines from the file
 void TimeSeries::initVectors() {
     std::vector<std::string> line = readLine(false);
     while (!line.empty()) {
@@ -96,6 +97,7 @@ void TimeSeries::initVectors() {
     }
 }
 
+// for debug purposes
 std::ostream& operator <<(std::ostream &out, const TimeSeries &time_series) {
     for(std::string str: time_series.features) {
         out << "FEATURE: " << str ;
@@ -111,35 +113,4 @@ std::ostream& operator <<(std::ostream &out, const TimeSeries &time_series) {
     return out;
 }
 
-
-
-
-/*
-TimeSeries::TimeSeries(const char* csvFileName) {
-    ifstream input(csvFileName);
-    string string1;
-    input >> string1;
-    string feature;
-    stringstream file(string1);
-    while(getline(file, feature, ',')) {
-        vector<float> vector;
-        featuresTable[feature] = vector;
-        featuresNames.push_back(feature);
-    }
-    while(!(input.eof())){
-        string line;
-        input >> line;
-        string value;
-        stringstream stringstream1(line);
-        int i = 0;
-        while(getline(stringstream1, value, ',')){
-            featuresTable[featuresNames[i]].push_back(stof(value));
-            i++;
-        }
-    }
-    input.close();
-    this->colCounter = featuresTable[featuresNames[0]].size();
-
-}
-  */
 
