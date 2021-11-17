@@ -1,12 +1,27 @@
-/*
+
 #include <iostream>
 #include "anomaly_detection_util.h"
 #include "timeseries.h"
+#include "SimpleAnomalyDetector.h"
 #include <fstream>
 bool wrong(float val, float expected){
     return val<expected-0.001 || val>expected+0.001;
 }
+/*
 int main () {
+  float array1[8] = {1,3,10,11,15,16,18,20};
+  float array2[8] = {1.2,3,10.2,13,18,16,19,21};
+  cout << cov(array1,array2, 8) / var(array1, 8) << endl;
+    TimeSeries test("monkey2.csv");
+    SimpleAnomalyDetector ad;
+    ad.learnNormal(test);
+    correlatedFeatures ft2 = ad.getNormalModel().at(1);
+    cout << ft2.lin_reg.a << endl;
+    cout << ft2.lin_reg.b << endl;
+    //vector<correlatedFeatures> feas = ad.getNormalModel();
+    //feas.size();
+
+
     int  i =6;
     float b =11;
     std::cout << "hello world" << std::endl;
@@ -39,7 +54,8 @@ int main () {
     for(int i=0;i<N;i++)
         delete ps[i];
     std::cout<<"very naise"<< std::endl;
-    TimeSeries test("monkey.csv");
+
     std::cout << test;
     return 0;
-}*/
+}
+*/

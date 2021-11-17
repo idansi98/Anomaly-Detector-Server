@@ -23,7 +23,7 @@ TimeSeries::TimeSeries(const char *csvFileName) : fileReader(), featureMap(), fe
         std::cout << "Unable to open file \n";
     }
     rowCount = 0;
-    features = readLine();
+    features = readLine(true);
     columnCount = features.size();
     // initializer functions
     initMap();
@@ -31,8 +31,9 @@ TimeSeries::TimeSeries(const char *csvFileName) : fileReader(), featureMap(), fe
 }
 
 
-std::vector<std::string> TimeSeries::readLine() {
+std::vector<std::string> TimeSeries::readLine(bool firstTime) {
     std::vector<std::string> words;
+
     std::string row;
     // gets a line from fileReader and puts it in row
     getline(fileReader, row);
@@ -51,6 +52,10 @@ std::vector<std::string> TimeSeries::readLine() {
         row.erase(0, pos + 1);
     }
     words.push_back(row);
+  if (words.size() != columnCount && !firstTime) {
+    std::cout << "wrong amount of elements in line " << rowCount + 1 << ", expected: " << columnCount<< " got: " << words.size() << std::endl;
+    exit(1);
+  }
     return words;
 }
 
@@ -67,7 +72,7 @@ void TimeSeries::initMap() {
 }
 
 void TimeSeries::initVectors() {
-    std::vector<std::string> line = readLine();
+    std::vector<std::string> line = readLine(false);
     while (!line.empty()) {
         rowCount++;
         int counter = 0;
@@ -87,8 +92,7 @@ void TimeSeries::initVectors() {
             // handle it
         }
         // get next line
-        rowCount++;
-        line = readLine();
+        line = readLine(false);
     }
 }
 

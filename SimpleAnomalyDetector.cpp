@@ -141,3 +141,9 @@ bool SimpleAnomalyDetector::isAnomal(float x, float y, correlatedFeatures cf){
   //cout << "DEV: " << std::abs(dev(Point(x,y),cf.lin_reg)) << " THRESHOLD: " << cf.threshold << endl;
   return (std::abs(dev(Point(x,y),cf.lin_reg)) > cf.threshold);
 }
+/*
+std::ostream& operator <<(std::ostream &out, const SimpleAnomalyDetector &detector) {
+
+  return out;
+}
+ */

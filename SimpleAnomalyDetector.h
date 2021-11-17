@@ -34,6 +34,8 @@ public:
     }
     Point** toPoints(vector<float> x, vector<float> y);
     bool isAnomal(float x, float y,correlatedFeatures cf);
+    //friend std::ostream& operator << (std::ostream& out, const SimpleAnomalyDetector& detector);
+
 };
 
 #endif //ANOMALY_DETECTION_UTIL_CPP_SIMPLEANOMALYDETECTOR_H

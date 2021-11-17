@@ -21,7 +21,7 @@ private:
     std::vector<std::string> features;
 
 private:
-    std::vector<std::string> readLine();
+    std::vector<std::string> readLine(bool firstTime);
     void initMap();
     void initVectors();
 
@@ -45,7 +45,7 @@ public:
     }
     // gets the row count
     int getRowCount() const {
-        return columnCount;
+        return rowCount;
     }
     // gets the column count
     int getColumnCount() const {
