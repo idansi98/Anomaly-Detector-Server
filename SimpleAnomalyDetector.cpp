@@ -25,8 +25,9 @@ SimpleAnomalyDetector::~SimpleAnomalyDetector() {
 }
 
 Point** SimpleAnomalyDetector::toPoints(vector <float> a, vector <float> b) {
-    Point **points = new Point* [a.size()];
-    for (int i = 0; i < a.size(); i++) {
+    int size = a.size();
+    Point **points = new Point* [size];
+    for (int i = 0; i < size; i++) {
         points[i] = new Point(a[i], b[i]);
     }
     return points;
