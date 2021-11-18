@@ -31,4 +31,4 @@ float dev(Point p,Point** points, int size);
 float dev(Point p,Line l);
 // returns distance between two points.
 float distance(Point a,Point b);
-#endif ANOMALY_DETECTOR_ANOMALY_DETECTION_UTIL_H
+#endif // ANOMALY_DETECTOR_ANOMALY_DETECTION_UTIL_H
