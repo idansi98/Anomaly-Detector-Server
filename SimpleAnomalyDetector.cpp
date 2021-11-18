@@ -77,14 +77,15 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts) {
                 correlatedFeas.push_back(cf[i]);
             }
             int len = correlatedFeas.size();
-            int i = 1;
+            int j = 1;
             for (correlatedFeatures c:correlatedFeas) {
                 if ((!c.feature1.compare(cf[i].feature1)) && (!c.feature1.compare(cf[i].feature2))) {
                     break;
                 }
-                if (i == len) {
+                if (j == len) {
                     correlatedFeas.push_back(cf[i]);
                 }
+                j++;
             }
         }
     }
