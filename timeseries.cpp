@@ -6,6 +6,7 @@
  *
  */
 //TODO: Add try/catch/exceptions
+
 #include "timeseries.h"
 #include <vector>
 #include <string>

@@ -1,3 +1,5 @@
+#ifndef TIMESERIES_CPP
+#define TIMESERIES_CPP
 
 #include "anomaly_detection_util.h"
 #include <fstream>
@@ -52,5 +54,6 @@ public:
     // for debug purposes
     friend std::ostream& operator << (std::ostream& out, const TimeSeries& time_series);
 };
+#endif
 
 
