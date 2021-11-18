@@ -1,8 +1,8 @@
 /*
  * anomaly_detection_util.cpp
  *
- * Authors:  206821258 Idan Simai
- *           206534299 Ido Tziony
+ * Authors:  206534299 Ido Tziony
+ *           206821258 Idan Simai
  *
  */
 
@@ -40,10 +40,11 @@ float var(const float* x, const int size) {
 float cov(const float* x, const float* y, int size) {
     float meanX = mean(x, size);
     float meanY = mean(y, size);
-    float final [size];
-    for (int i = 0; i < size; i++)
-        final[i] = (x[i] - meanX) * (y[i] - meanY);
-    float covariance = mean(final, size);
+    float array1[size];
+  for (int i = 0; i < size; ++i) {
+    array1[i] = (x[i]-meanX) * (y[i]-meanY);
+  }
+    float covariance = mean(array1,size);
     return covariance;
 }
 
