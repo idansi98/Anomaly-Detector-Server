@@ -6,8 +6,6 @@
  *
  */
 //TODO: Add try/catch/exceptions
-// compile only once
-#pragma once
 #include "timeseries.h"
 #include <vector>
 #include <string>

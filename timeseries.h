@@ -1,6 +1,4 @@
 
-// compile only once
-#pragma once
 #include "anomaly_detection_util.h"
 #include <fstream>
 #include <iostream>
