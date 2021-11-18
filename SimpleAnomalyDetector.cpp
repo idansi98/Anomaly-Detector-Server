@@ -65,7 +65,7 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts) {
     correlatedFeatures cf[columnCount];
     // reset default correlation to be 0
     for (int i = 0; i < columnCount; ++i) {
-        cf[i].correlation = 0;
+        cf[i].corrlation = 0;
     }
     //TODO: make this into a separate function
 
@@ -86,14 +86,14 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts) {
               bestCorrelation = correlation;
               correlationFriend = j;
               // if column i found a new friend
-                if (correlation > cf[i].correlation) {
-                    cf[i].correlation = correlation;
+                if (correlation > cf[i].corrlation) {
+                    cf[i].corrlation = correlation;
                     cf[i].feature1 = featuresVector[i];
                     cf[i].feature2 = featuresVector[j];
                 }
                 // if column j found a new friend
-                if (correlation > cf[j].correlation) {
-                    cf[j].correlation = correlation;
+                if (correlation > cf[j].corrlation) {
+                    cf[j].corrlation = correlation;
                     cf[j].feature1 = featuresVector[i];
                     cf[j].feature2 = featuresVector[j];
                 }
@@ -105,7 +105,7 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts) {
     //for all columns of pairs:
     for (int i = 0; i < columnCount; ++i) {
       // if correlation is high enough -> make it into an array of points.
-        if (cf[i].correlation >= threshold) {
+        if (cf[i].corrlation >= threshold) {
             Point **points = toPoints(ts.getColumn(cf[i].feature1),
                                       ts.getColumn(cf[i].feature2));
             //  get the linear regression + threshold of points and put it in cf
