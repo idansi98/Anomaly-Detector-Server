@@ -20,7 +20,7 @@ using namespace std;
 // Function to check whether a point lies inside or on the boundaries of the circle.
 bool isInside(const Circle& c, const Point& p)
 {
-    return (distance(c.center, p) <= c.radius);
+    return (dist(c.center, p) <= c.radius);
 }
 
 //Return the distance between 2 points.
@@ -44,14 +44,14 @@ Circle findCircleFrom3(const Point& a, const Point& b, const Point& c)
     Point d = getCircleCenter(b.x - a.x, b.y - a.y,c.x - a.x, c.y - a.y);
     d.x += a.x;
     d.y += a.y;
-    return { d, distance(d, a) };
+    return { d, dist(d, a) };
 }
 
 // Function to return the smallest circle that intersects 2 points.
 Circle findCircleFrom2(const Point& a, const Point& b) {
     float x = ((a.x + b.x) / 2);
     float y = ((a.y + b.y) / 2);
-    float r = ((distance(a, b)) / 2);
+    float r = ((dist(a, b)) / 2);
     return {{x, y}, r};
 }
 
