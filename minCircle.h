@@ -20,6 +20,8 @@ public:
 };
 //Function to check whether a point lies inside or on the boundaries of the circle.
 bool isInside(const Circle& c, const Point& p);
+//Return the distance between two points.
+float dist(Point a, Point b);
 //Helper method to get a circle defined by 3 points.
 Point getCircleCenter(float ax, float ay, float bx, float by);
 //Function to return a unique circle that intersects three points.

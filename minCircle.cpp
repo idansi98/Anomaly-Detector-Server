@@ -23,7 +23,12 @@ bool isInside(const Circle& c, const Point& p)
     return (distance(c.center, p) <= c.radius);
 }
 
-
+//Return the distance between 2 points.
+float dist(Point a, Point b) {
+    float x2 = (a.x - b.x) * (a.x - b.x);
+    float y2 = (a.y - b.y) * (a.y - b.y);
+    return sqrt(x2 + y2);
+}
 // Helper method to get a circle defined by 3 points
 Point getCircleCenter(float ax, float ay, float bx, float by)
 {
