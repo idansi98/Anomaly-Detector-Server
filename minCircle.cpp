@@ -8,6 +8,7 @@
  */
 
 #include "minCircle.h"
+#include "anomaly_detection_util.h"
 #include <algorithm>
 #include <iostream>
 #include <math.h>
