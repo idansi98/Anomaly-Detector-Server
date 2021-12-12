@@ -7,6 +7,7 @@
  */
 
 #include "SimpleAnomalyDetector.h"
+#include "minCircle.h"
 //#include "anomaly_detection_util.h"
 //#include "timeseries.h"
 //#include "AnomalyDetector.h"
@@ -102,6 +103,7 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts) {
             }
         }
     }
+    int len = ts.getRowCount();
     //If here: done getting most correlating pairs + correlation number.
 
     //For all columns of pairs:
@@ -115,8 +117,29 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts) {
             cf[i].threshold = 1.15f * findThreshold(points, rowCount, cf[i].lin_reg);
           if (!isContainedInCorrelatedFeas(cf[i])) {
               correlatedFeas.push_back(cf[i]);
+              // delete points
+              for(size_t i = 0;i < len;i++)
+                  delete points[i];
+              delete[] points;
             }
         }
+        if (cf[i].corrlation < threshold && cf[i].corrlation > hybridtreshhold) {
+            Point **points = toPoints(ts.getColumn(cf[i].feature1),
+                                      ts.getColumn(cf[i].feature2));
+            Circle circle = findMinCircle(points, len);
+            cf[i].x = circle.center.x;
+            cf[i].y= circle.center.y;
+            cf[i].radius = circle.radius;
+            cf[i].threshold = cf[i].radius * 1.15f;
+            if (!isContainedInCorrelatedFeas(cf[i])) {
+                correlatedFeas.push_back(cf[i]);
+            }
+            // delete points
+            for(size_t i = 0;i < len;i++)
+                delete points[i];
+            delete[] points;
+        }
+
     }
 }
 
@@ -140,7 +163,7 @@ vector<AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries& ts) {
 }
 
 //Checks if a given point - represented as (x,y), is an anomaly in relation to the expected line produced by cf.
-bool SimpleAnomalyDetector::isAnomal(float x, float y, correlatedFeatures cf){
+bool SimpleAnomalyDetector::isAnomal(float x, float y, correlatedFeatures cf) {
   return (std::abs(dev(Point(x,y),cf.lin_reg)) > cf.threshold);
 }
 /*

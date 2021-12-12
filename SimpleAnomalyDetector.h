@@ -16,11 +16,14 @@ struct correlatedFeatures {
     float corrlation;
     Line lin_reg;
     float threshold;
+    float radius;
+    float x,y;
 };
 
 class SimpleAnomalyDetector: public TimeSeriesAnomalyDetector {
 protected:
     float threshold = 0.9;
+    float hybridtreshhold = 0.5;
     vector<correlatedFeatures> correlatedFeas;
 public:
 //Check if a pair is contained in the vector.
@@ -42,7 +45,7 @@ vector<correlatedFeatures> getNormalModel() {
 //Convert to vectors of floats to an array of points.
 Point** toPoints(vector<float> x, vector<float> y);
 //Checks if a given point - represented as (x,y), is an anomaly in relation to the expected line produced by cf.
-bool isAnomal(float x, float y,correlatedFeatures cf);
+virtual bool isAnomal(float x, float y,correlatedFeatures cf);
 //friend std::ostream& operator << (std::ostream& out, const SimpleAnomalyDetector& detector);
 
 };
