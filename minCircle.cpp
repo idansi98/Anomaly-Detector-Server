@@ -8,7 +8,6 @@
  */
 
 #include "minCircle.h"
-#include "anomaly_detection_util.h"
 #include <algorithm>
 #include <iostream>
 #include <math.h>
@@ -16,10 +15,8 @@
 
 using namespace std;
 
-
 // Function to check whether a point lies inside or on the boundaries of the circle.
-bool isInside(const Circle& c, const Point& p)
-{
+bool isInside(const Circle& c, const Point& p) {
     return (dist(c.center, p) <= c.radius);
 }
 
@@ -29,7 +26,8 @@ float dist(Point a, Point b) {
     float y2 = (a.y - b.y) * (a.y - b.y);
     return sqrt(x2 + y2);
 }
-// Helper method to get a circle defined by 3 points
+
+//Method to get a circle defined by 3 points.
 Point getCircleCenter(float ax, float ay, float bx, float by)
 {
     float A = ax * ax + ay * ay;
@@ -38,7 +36,7 @@ Point getCircleCenter(float ax, float ay, float bx, float by)
     return Point(((by * A - ay * B) / (2 * C)), ((ax * B - bx * A) / (2 * C)));
 }
 
-// Function to return a unique circle that intersects three points.
+//Function to return a unique circle that intersects three points.
 Circle findCircleFrom3(const Point& a, const Point& b, const Point& c)
 {
     Point d = getCircleCenter(b.x - a.x, b.y - a.y,c.x - a.x, c.y - a.y);
@@ -47,7 +45,7 @@ Circle findCircleFrom3(const Point& a, const Point& b, const Point& c)
     return { d, dist(d, a) };
 }
 
-// Function to return the smallest circle that intersects 2 points.
+//Function to return the smallest circle that intersects 2 points.
 Circle findCircleFrom2(const Point& a, const Point& b) {
     float x = ((a.x + b.x) / 2);
     float y = ((a.y + b.y) / 2);
@@ -55,7 +53,7 @@ Circle findCircleFrom2(const Point& a, const Point& b) {
     return {{x, y}, r};
 }
 
-// Function to check whether a circle encloses the given points.
+//Function to check whether a circle encloses the given points.
 bool isValidCircle(const Circle& c, const vector<Point>& P)
 {
 // Iterating through all the point to check  whether the point lie inside the circle or not.
@@ -88,8 +86,9 @@ Circle findMinCircleTrivial(vector<Point>& points)
     return findCircleFrom3(points[0], points[1], points[2]);
 }
 
-// Returns the MEC using Welzl's algorithm Takes a set of input points and a vector of points on the circle boundary.
-// n represents the number of points in points that are not yet processed.
+/* Returns the MEC using Welzl's algorithm Takes a set of input points and a vector of points on the circle boundary.
+   n represents the number of points in points that are not yet processed.
+ */
 Circle minCircle(Point** points, vector<Point> vector, size_t n) {
 //Check if there are no more points to check or |vector| = 3.
     if (n == 0 || vector.size() == 3) {
@@ -108,7 +107,6 @@ Circle minCircle(Point** points, vector<Point> vector, size_t n) {
     }
 //Otherwise, must be on the boundary of the MEC.
     vector.push_back(p);
-
 //Return the MEC for points - {p} and vector U {p}.
     return minCircle(points, vector, (n - 1));
 }

@@ -19,7 +19,7 @@ float sum(const float* x, int size) {
     return sum;
 }
 //returns the distance between two points
-float distance(Point a,Point b) {
+float distance(Point a, Point b) {
     return std::sqrt(std::pow(b.x - a.x, 2) + std::pow(b.y - a.y, 2));
 }
 // returns the mean of an array of floats

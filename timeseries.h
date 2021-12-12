@@ -15,9 +15,9 @@ private:
     int rowCount;
     int columnCount;
     std::ifstream fileReader;
-    // this will contain all the features and the vectors they have
+    //This will contain all the features and the vectors they have.
     std::map<std::string, std::vector<float>> featureMap;
-    // a vector, same siz as rows that contains the list of features
+    //A vector, same siz as rows that contains the list of features.
     std::vector<std::string> features;
 
 private:
@@ -26,33 +26,33 @@ private:
     void initVectors();
 
 public:
-    explicit TimeSeries(const char *csvFileName);
-// get features
-    const std::vector<std::string>& getFeatures() const{
-        return features;
+explicit TimeSeries(const char *csvFileName);
+//Get features.
+const std::vector<std::string>& getFeatures() const {
+    return features;
     }
-    // get feature by number
-    const std::string& getFeature(int featureNumber) const {
-        return features[featureNumber];
+//Get feature by a number.
+const std::string& getFeature(int featureNumber) const {
+    return features[featureNumber];
     }
-    // get column given a feature
-    const std::vector<float>& getColumn(std::string feature) const {
-        return featureMap.at(feature);
+//Get column given a feature.
+const std::vector<float>& getColumn(std::string feature) const {
+    return featureMap.at(feature);
     }
-    // get a column by feature number
-    const std::vector<float>& getColumn(int featureNumber) const {
-        return featureMap.at(getFeature(featureNumber));
+//Get a column by a feature number.
+const std::vector<float>& getColumn(int featureNumber) const {
+     return featureMap.at(getFeature(featureNumber));
     }
-    // gets the row count
-    int getRowCount() const {
-        return rowCount;
+//Gets the row count.
+int getRowCount() const {
+     return rowCount;
     }
-    // gets the column count
-    int getColumnCount() const {
-        return features.size();
+//Gets the column count.
+int getColumnCount() const {
+     return features.size();
     }
-    // for debug purposes
-    friend std::ostream& operator << (std::ostream& out, const TimeSeries& time_series);
+//For debug purposes.
+friend std::ostream& operator << (std::ostream& out, const TimeSeries& time_series);
 };
 #endif
 

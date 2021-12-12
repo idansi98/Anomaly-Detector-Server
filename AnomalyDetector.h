@@ -18,8 +18,9 @@ public:
 };
 class TimeSeriesAnomalyDetector {
 public:
-    virtual void learnNormal(const TimeSeries& ts)=0;
-    virtual vector<AnomalyReport> detect(const TimeSeries& ts)=0;
+//Learn the normal regre
+    virtual void learnNormal(const TimeSeries& ts) = 0;
+    virtual vector<AnomalyReport> detect(const TimeSeries& ts) = 0;
     virtual ~TimeSeriesAnomalyDetector(){}
 };
 #endif //ANOMALY_DETECTION_UTIL_CPP_ANOMALYDETECTOR_H

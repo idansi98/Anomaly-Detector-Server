@@ -1,6 +1,4 @@
-//
-// Created by idans on 11/12/2021.
-//
+
 
 #ifndef ANOMALYDETECTOR_MINCIRCLE_H
 #define ANOMALYDETECTOR_MINCIRCLE_H
