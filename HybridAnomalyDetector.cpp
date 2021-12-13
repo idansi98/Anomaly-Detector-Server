@@ -12,7 +12,7 @@ HybridAnomalyDetector::~HybridAnomalyDetector() {
 }
 
 bool HybridAnomalyDetector::isAnomal(float x, float y,correlatedFeatures cf) {
-    return (cf.corrlation >= cf.threshold && (std::abs(dev(Point(x,y),cf.lin_reg)) > cf.threshold)) ||
+    return (cf.corrlation >= cf.threshold && SimpleAnomalyDetector::isAnomal(x, y ,cf)) ||
            (cf.corrlation > 0.5 && cf.corrlation < cf.threshold &&
            distance(Point(cf.x, cf.y),Point(x, y)) > cf.threshold);
 }
