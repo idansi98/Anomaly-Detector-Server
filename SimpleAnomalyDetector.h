@@ -34,6 +34,7 @@ SimpleAnomalyDetector();
 virtual ~SimpleAnomalyDetector();
 //Learn the normal behaviour from a given time series.
 virtual void learnNormal(const TimeSeries& ts);
+virtual void learnNormalHelper(const TimeSeries &ts, correlatedFeatures cf [],const int rowCount, int i);
 //Detect the exceptions.
 virtual vector<AnomalyReport> detect(const TimeSeries& ts);
 //Find the threshold given a point object array.

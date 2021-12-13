@@ -104,13 +104,13 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts) {
             }
         }
     }
-    int len = ts.getRowCount();
     //If here: done getting most correlating pairs + correlation number.
 
     //For all columns of pairs:
     for (int i = 0; i < columnCount; ++i) {
       //If correlation is high enough -> make it into an array of points.
-        if (cf[i].corrlation >= threshold) {
+        learnNormalHelper(ts, cf, rowCount, i);
+        /*if (cf[i].corrlation >= threshold) {
             Point **points = toPoints(ts.getColumn(cf[i].feature1),
                                       ts.getColumn(cf[i].feature2));
             //Get the linear regression + threshold of points and put it in cf.
@@ -119,7 +119,7 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts) {
           if (!isContainedInCorrelatedFeas(cf[i])) {
               correlatedFeas.push_back(cf[i]);
               // delete points
-              for(size_t i = 0;i < len;i++)
+              for(size_t i = 0;i < rowCount;i++)
                   delete points[i];
               delete[] points;
             }
@@ -127,7 +127,7 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts) {
         if (cf[i].corrlation < threshold && cf[i].corrlation > hybridtreshhold) {
             Point **points = toPoints(ts.getColumn(cf[i].feature1),
                                       ts.getColumn(cf[i].feature2));
-            Circle circle = findMinCircle(points, len);
+            Circle circle = findMinCircle(points, rowCount);
             cf[i].x = circle.center.x;
             cf[i].y= circle.center.y;
             cf[i].radius = circle.radius;
@@ -136,37 +136,54 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts) {
                 correlatedFeas.push_back(cf[i]);
             }
             // delete points
-            for(size_t i = 0;i < len;i++)
+            for(size_t i = 0;i < rowCount;i++)
                 delete points[i];
             delete[] points;
-        }
+        }*/
 
     }
 }
 
-//Returns a vector of all anomalies in given TimeSeries ts (based on prev. learned data).
-vector<AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries& ts) {
-    vector<AnomalyReport> v;
-    //For each pair of correlations:
-    for_each(correlatedFeas.begin(), correlatedFeas.end(),[&v, &ts, this](correlatedFeatures c) {
-      //Get both columns.
-        vector<float> firstColumn = ts.getColumn(c.feature1);
-        vector<float> secondColumn = ts.getColumn(c.feature2);
-        //For each value pair in the columns.
-        for (int i = 0; i < firstColumn.size(); i++) {
-          if (isAnomal(firstColumn[i], secondColumn[i], c)) {
-            string s = c.feature1 + "-" + c.feature2;
-            v.push_back(AnomalyReport(s, i + 1));
-          }
+void SimpleAnomalyDetector::learnNormalHelper(const TimeSeries &ts, correlatedFeatures cf [],
+                                              const int rowCount, int i) {
+    if (cf[i].corrlation >= threshold) {
+        Point **points = toPoints(ts.getColumn(cf[i].feature1),
+                                  ts.getColumn(cf[i].feature2));
+        //Get the linear regression + threshold of points and put it in cf.
+        cf[i].lin_reg = linear_reg(points, rowCount);
+        cf[i].threshold = 1.15f * findThreshold(points, rowCount, cf[i].lin_reg);
+        if (!isContainedInCorrelatedFeas(cf[i])) {
+            correlatedFeas.push_back(cf[i]);
+            // delete points
+            for (size_t i = 0; i < rowCount; i++)
+                delete points[i];
+            delete[] points;
         }
-    });
-    return v;
+    }
 }
+//Returns a vector of all anomalies in given TimeSeries ts (based on prev. learned data).
+    vector<AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries &ts) {
+        vector<AnomalyReport> v;
+        //For each pair of correlations:
+        for_each(correlatedFeas.begin(), correlatedFeas.end(), [&v, &ts, this](correlatedFeatures c) {
+            //Get both columns.
+            vector<float> firstColumn = ts.getColumn(c.feature1);
+            vector<float> secondColumn = ts.getColumn(c.feature2);
+            //For each value pair in the columns.
+            for (int i = 0; i < firstColumn.size(); i++) {
+                if (isAnomal(firstColumn[i], secondColumn[i], c)) {
+                    string s = c.feature1 + "-" + c.feature2;
+                    v.push_back(AnomalyReport(s, i + 1));
+                }
+            }
+        });
+        return v;
+    }
 
 //Checks if a given point - represented as (x,y), is an anomaly in relation to the expected line produced by cf.
-bool SimpleAnomalyDetector::isAnomal(float x, float y, correlatedFeatures cf) {
-  return (std::abs(dev(Point(x,y),cf.lin_reg)) > cf.threshold);
-}
+    bool SimpleAnomalyDetector::isAnomal(float x, float y, correlatedFeatures cf) {
+        return (std::abs(dev(Point(x, y), cf.lin_reg)) > cf.threshold);
+    }
 /*
 std::ostream& operator <<(std::ostream &out, const SimpleAnomalyDetector &detector) {
 
