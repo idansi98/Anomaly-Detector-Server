@@ -17,7 +17,8 @@ bool HybridAnomalyDetector::isAnomal(float x, float y,correlatedFeatures cf) {
            distance(Point(cf.x, cf.y),Point(x, y)) > cf.threshold);
 }
 
-void HybridAnomalyDetector::learnNormalHelper(const TimeSeries &ts, correlatedFeatures cf [],const int rowCount, int i) {
+void HybridAnomalyDetector::learnNormalHelper(const TimeSeries &ts, correlatedFeatures cf [],
+                                              const int rowCount, int i) {
     SimpleAnomalyDetector::learnNormalHelper(ts, cf, rowCount, i);
     if (cf[i].corrlation < threshold && cf[i].corrlation > hybridtreshhold) {
         Point **points = SimpleAnomalyDetector::toPoints(ts.getColumn(cf[i].feature1),

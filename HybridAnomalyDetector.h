@@ -11,7 +11,7 @@ public:
     HybridAnomalyDetector();
     virtual ~HybridAnomalyDetector();
     virtual bool isAnomal(float x, float y, correlatedFeatures cf);
-    virtual void learnNormalHelper(const TimeSeries &ts, correlatedFeatures cf [],const int rowCount, int i);
+    virtual void learnNormalHelper(const TimeSeries &ts, correlatedFeatures  cf [],const int rowCount, int i);
 
 };
 
