@@ -83,7 +83,8 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts) {
         //For each column j > i.
         for (int j = (i + 1); j < columnCount; ++j) {
           //Get correlation from columns i : j.
-            float correlation = (std::abs(pearson(&ts.getColumn(i)[0], &ts.getColumn(j)[0], ts.getRowCount())));
+            float correlation = (std::abs(pearson(&ts.getColumn(i)[0],
+                                                  &ts.getColumn(j)[0], ts.getRowCount())));
             //If correlation is higher than previous correlations -> swap it.
             if (correlation > bestCorrelation) {
               bestCorrelation = correlation;
@@ -130,7 +131,7 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts) {
             cf[i].x = circle.center.x;
             cf[i].y= circle.center.y;
             cf[i].radius = circle.radius;
-            cf[i].threshold = cf[i].radius * 1.15f;
+            cf[i].threshold = cf[i].radius * 1.1f;
             if (!isContainedInCorrelatedFeas(cf[i])) {
                 correlatedFeas.push_back(cf[i]);
             }
