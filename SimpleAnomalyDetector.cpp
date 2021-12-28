@@ -105,42 +105,10 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts) {
         }
     }
     //If here: done getting most correlating pairs + correlation number.
-
     //For all columns of pairs:
     for (int i = 0; i < columnCount; ++i) {
       //If correlation is high enough -> make it into an array of points.
         learnNormalHelper(ts, cf, rowCount, i);
-        /*if (cf[i].corrlation >= threshold) {
-            Point **points = toPoints(ts.getColumn(cf[i].feature1),
-                                      ts.getColumn(cf[i].feature2));
-            //Get the linear regression + threshold of points and put it in cf.
-            cf[i].lin_reg = linear_reg(points, rowCount);
-            cf[i].threshold = 1.15f * findThreshold(points, rowCount, cf[i].lin_reg);
-          if (!isContainedInCorrelatedFeas(cf[i])) {
-              correlatedFeas.push_back(cf[i]);
-              // delete points
-              for(size_t i = 0;i < rowCount;i++)
-                  delete points[i];
-              delete[] points;
-            }
-        }
-        if (cf[i].corrlation < threshold && cf[i].corrlation > hybridtreshhold) {
-            Point **points = toPoints(ts.getColumn(cf[i].feature1),
-                                      ts.getColumn(cf[i].feature2));
-            Circle circle = findMinCircle(points, rowCount);
-            cf[i].x = circle.center.x;
-            cf[i].y= circle.center.y;
-            cf[i].radius = circle.radius;
-            cf[i].threshold = cf[i].radius * 1.1f;
-            if (!isContainedInCorrelatedFeas(cf[i])) {
-                correlatedFeas.push_back(cf[i]);
-            }
-            // delete points
-            for(size_t i = 0;i < rowCount;i++)
-                delete points[i];
-            delete[] points;
-        }*/
-
     }
 }
 
