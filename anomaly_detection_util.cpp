@@ -1,8 +1,9 @@
 /*
  * anomaly_detection_util.cpp
  *
- * Authors:     206821258 Idan Simai
- *              206534299 Ido Tziony
+ * Authors:     206534299 Ido Tziony
+ *              206821258 Idan Simai
+ *
  *
  *
  */

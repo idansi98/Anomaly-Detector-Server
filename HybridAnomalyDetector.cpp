@@ -1,3 +1,12 @@
+/*
+ * HybridAnomalyDetector.cpp
+ *
+ * Authors:     206534299 Ido Tziony
+ *              206821258 Idan Simai
+ *
+ *
+ *
+ */
 
 #include "HybridAnomalyDetector.h"
 #include "SimpleAnomalyDetector.h"
