@@ -28,26 +28,36 @@
 
 using namespace std;
 
-class DefaultIO{
- public:
-  virtual string read()=0;
-  virtual void write(string text)=0;
-  virtual void write(float f)=0;
-  virtual void read(float* f)=0;
-  virtual ~DefaultIO(){}
+class DefaultIO {
+public:
+    virtual string read()=0;
+    virtual void write(string text)=0;
+    virtual void write(float f)=0;
+    virtual void read(float* f)=0;
+    virtual ~DefaultIO(){}
 
-  // you may add additional methods here
+    // you may add additional methods here
 };
 
 // you may add here helper classes
 
 
 // you may edit this class
-class Command{
-  DefaultIO* dio;
- public:
-  Command(DefaultIO* dio):dio(dio){}
-  virtual void execute()=0;
-  virtual ~Command(){}
+class Command {
+    DefaultIO* dio;
+protected:
+    string description;
+public:
+    Command(DefaultIO* dio):dio(dio){}
+    virtual void execute()=0;
+    virtual ~Command(){}
 }
+
+class One:public Command {
+public:
+    One(DefaultIO* dio):dio(dio) {
+        this->description = "upload a time series csv file";
+    }
+
+};
 #endif //ANOMALYDETECTOR_H__COMMANDS_H_

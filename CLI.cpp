@@ -6,15 +6,16 @@
 // main flow of the program
 // TODO: handle the program flow
 #include "CLI.h"
+#include "commands.h"
 
 CLI::CLI(DefaultIO* dio) {
-  this->dio = dio;
+    this->dio = dio;
 }
 
 void CLI::start(){
-  // create commands
-  // show the user
-  // handle the main logic
+    // create commands
+    // show the user
+    // handle the main logic
 }
 
 
