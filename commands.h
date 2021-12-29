@@ -40,23 +40,30 @@ public:
 };
 
 // you may add here helper classes
+struct Data {
+    float threshold;
 
+};
 
 // you may edit this class
 class Command {
-    DefaultIO* dio;
 protected:
+    DefaultIO* dio;
     string description;
 public:
     Command(DefaultIO* dio):dio(dio){}
-    virtual void execute()=0;
+    virtual void execute(Data* data)=0;
     virtual ~Command(){}
-}
+};
 
-class One:public Command {
+class UPLOAD:public Command {
 public:
-    One(DefaultIO* dio):dio(dio) {
+    UPLOAD(DefaultIO* dio):Command(dio) {
         this->description = "upload a time series csv file";
+    }
+    virtual void execute(Data* data) {
+        dio->write("Please upload your local train CSV file.\n");
+
     }
 
 };
