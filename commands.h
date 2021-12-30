@@ -21,7 +21,6 @@
 #define ANOMALYDETECTOR_H__COMMANDS_H_
 #include<iostream>
 #include <string.h>
-
 #include <fstream>
 #include <vector>
 #include "HybridAnomalyDetector.h"

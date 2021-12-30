@@ -12,7 +12,7 @@ CLI::CLI(DefaultIO* dio) {
     this->dio = dio;
 }
 
-void CLI::start(){
+void CLI::start() {
     // create commands
     // show the user
     // handle the main logic
