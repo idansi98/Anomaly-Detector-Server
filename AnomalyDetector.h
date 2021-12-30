@@ -18,7 +18,7 @@ public:
 };
 class TimeSeriesAnomalyDetector {
 public:
-//Learn the normal regre
+//Learn the normal regression.
     virtual void learnNormal(const TimeSeries& ts) = 0;
     virtual vector<AnomalyReport> detect(const TimeSeries& ts) = 0;
     virtual ~TimeSeriesAnomalyDetector(){}
