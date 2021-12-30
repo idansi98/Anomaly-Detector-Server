@@ -3,7 +3,6 @@
 //
 
 /*
- *  TODO: Command class implementation DISPLAY_RESULTS
  *  TODO: Command class implementation UPLOAD_AND_ANALYZE_RESULTS
  *  TODO: Command class implementation EXIT
  *  TODO: DefaultIO class implementation CLI
@@ -70,10 +69,10 @@ public:
 };
 
 //A class for the first command which is "Upload".
-class UPLOAD:public Command {
+class UPLOAD: public Command {
 public:
 UPLOAD(DefaultIO* dio):Command(dio) {
-    this->description = "upload a time series csv file";
+    this->description = "1. upload a time series csv file";
     }
 virtual void execute(Data* data) {
     dio->write("Please upload your local train CSV file.\n");
@@ -86,10 +85,10 @@ virtual void execute(Data* data) {
 };
 
 //A class for the second command which is "Set new threshold".
-class THRESHOLD:public Command {
+class THRESHOLD: public Command {
 public:
 THRESHOLD(DefaultIO* dio): Command(dio) {
-    this->description = "2.algorithm settings";
+    this->description = "2. algorithm settings";
     }
 virtual void execute(Data* data) {
     bool check = false;
@@ -110,10 +109,10 @@ virtual void execute(Data* data) {
 };
 
 //A class for the third command which is "Detect anomalies".
-class DETECT:public Command {
+class DETECT: public Command {
 public:
 DETECT(DefaultIO* dio): Command(dio) {
-    this->description = "3.detect anomalies";
+    this->description = "3. detect anomalies";
 }
 virtual void execute(Data* data) {
     TimeSeries train("anomalyTrain.csv");
@@ -128,7 +127,7 @@ virtual void execute(Data* data) {
 //A class for the fourth command which is "Displaying results".
 class DISPLAY_RESULTS: public Command {
 DISPLAY_RESULTS(DefaultIO* dio): Command(dio) {
-    this->description = "4.display results";
+    this->description = "4. display results";
 }
 virtual void execute(Data* data) {
     vector<AnomalyReport> anomalyReport = data->anomalyReport;
@@ -140,4 +139,12 @@ virtual void execute(Data* data) {
 }
 };
 
+//A class for the sixth command which is "Exit".
+class Exit: public Command{
+Exit(DefaultIO* dio): Command(dio) {
+        this->description = "6. exit";
+    }
+virtual void execute(Data* data) {
+}
+};
 #endif //ANOMALYDETECTOR_H__COMMANDS_H_
