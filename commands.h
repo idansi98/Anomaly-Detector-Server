@@ -3,8 +3,7 @@
 //
 
 /*
- *  TODO: Command class implementation UPLOAD_AND_ANALYZE_RESULTS
- *  TODO: Command class implementation EXIT
+ *  TODO: Command class implementation UPLOAD_AND_ANALYZE
  *  TODO: DefaultIO class implementation CLI
  *  TODO: DefaultIO class implementation SV-CL
  */
@@ -126,6 +125,7 @@ virtual void execute(Data* data) {
 
 //A class for the fourth command which is "Displaying results".
 class DISPLAY_RESULTS: public Command {
+public:
 DISPLAY_RESULTS(DefaultIO* dio): Command(dio) {
     this->description = "4. display results";
 }
@@ -139,8 +139,20 @@ virtual void execute(Data* data) {
 }
 };
 
+//A class for the fourth command which is "Displaying results".
+class UPLOAD_AND_ANALYZE: public Command {
+public:
+UPLOAD_AND_ANALYZE(DefaultIO* dio): Command(dio) {
+    this->description = "5. upload anomalies and analyze results";
+}
+virtual void execute(Data* data) {
+    //TODO:Complete the implementation.
+}
+
+};
 //A class for the sixth command which is "Exit".
-class Exit: public Command{
+class Exit: public Command {
+public:
 Exit(DefaultIO* dio): Command(dio) {
         this->description = "6. exit";
     }
