@@ -37,8 +37,8 @@ void CLI::start() {
                   "5.upload anomalies and analyze results\n6.exit\n";
     float num = 0;
     dio->read(&num);
+    dio->write(menu);
     while (num != 6) {
-        dio->write(menu);
         switch ((int) num) {
             case 1: {
                 commands[0]->execute(data);
@@ -67,7 +67,8 @@ void CLI::start() {
                 break;
             }
         }
-                dio->read(&num);
+        dio->read(&num);
+        dio->write(menu);
         }
     }
 
