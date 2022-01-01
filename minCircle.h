@@ -1,4 +1,11 @@
-
+/*
+ * minCircle.h
+ *
+ * Authors:     206534299 Ido Tziony
+ *              206821258 Idan Simai
+ *
+ *
+ */
 
 #ifndef ANOMALYDETECTOR_MINCIRCLE_H
 #define ANOMALYDETECTOR_MINCIRCLE_H

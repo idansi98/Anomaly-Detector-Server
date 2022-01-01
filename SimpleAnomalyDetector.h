@@ -1,4 +1,11 @@
-
+/*
+ * SimpleAnomalyDetector.h
+ *
+ * Authors:     206534299 Ido Tziony
+ *              206821258 Idan Simai
+ *
+ *
+ */
 
 #ifndef ANOMALY_DETECTION_UTIL_CPP_SIMPLEANOMALYDETECTOR_H
 #define ANOMALY_DETECTION_UTIL_CPP_SIMPLEANOMALYDETECTOR_H
@@ -23,7 +30,7 @@ struct correlatedFeatures {
 class SimpleAnomalyDetector: public TimeSeriesAnomalyDetector {
 protected:
     float threshold = 0.9;
-    float hybridtreshhold = 0.5;
+    float hybridThreshold = 0.5;
     vector<correlatedFeatures> correlatedFeas;
 public:
 //Check if a pair is contained in the vector.
@@ -35,6 +42,10 @@ virtual ~SimpleAnomalyDetector();
 //Learn the normal behaviour from a given time series.
 virtual void learnNormal(const TimeSeries& ts);
 virtual void learnNormalHelper(const TimeSeries &ts, correlatedFeatures cf [],const int rowCount, int i);
+// for setting the threshold later
+void setThreshold(float threshold) {
+  this->threshold = threshold;
+}
 //Detect the exceptions.
 virtual vector<AnomalyReport> detect(const TimeSeries& ts);
 //Find the threshold given a point object array.

@@ -1,4 +1,11 @@
-
+/*
+ * AnomalyDetector.h
+ *
+ * Authors:     206534299 Ido Tziony
+ *              206821258 Idan Simai
+ *
+ *
+ */
 
 #ifndef ANOMALY_DETECTION_UTIL_CPP_ANOMALYDETECTOR_H
 #define ANOMALY_DETECTION_UTIL_CPP_ANOMALYDETECTOR_H

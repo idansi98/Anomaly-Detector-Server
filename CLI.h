@@ -1,6 +1,11 @@
-//
-// Created by Ido on 28/12/2021.
-//
+/*
+ * CLI.h
+ *
+ * Authors:     206534299 Ido Tziony
+ *              206821258 Idan Simai
+ *
+ *
+ */
 #ifndef ANOMALYDETECTOR_H__CLI_H_
 #define ANOMALYDETECTOR_H__CLI_H_
 

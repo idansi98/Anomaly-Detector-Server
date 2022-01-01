@@ -1,3 +1,12 @@
+/*
+ * timeseries.h
+ *
+ * Authors:     206534299 Ido Tziony
+ *              206821258 Idan Simai
+ *
+ *
+ */
+
 #ifndef TIMESERIES_CPP
 #define TIMESERIES_CPP
 

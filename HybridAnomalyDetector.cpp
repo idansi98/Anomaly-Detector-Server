@@ -29,7 +29,7 @@ bool HybridAnomalyDetector::isAnomal(float x, float y,correlatedFeatures cf) {
 void HybridAnomalyDetector::learnNormalHelper(const TimeSeries &ts, correlatedFeatures cf [],
                                               const int rowCount, int i) {
     SimpleAnomalyDetector::learnNormalHelper(ts, cf, rowCount, i);
-    if (cf[i].corrlation < threshold && cf[i].corrlation > hybridtreshhold) {
+    if (cf[i].corrlation < threshold && cf[i].corrlation > hybridThreshold) {
         Point **points = SimpleAnomalyDetector::toPoints(ts.getColumn(cf[i].feature1),
                                   ts.getColumn(cf[i].feature2));
         Circle circle = findMinCircle(points, rowCount);
