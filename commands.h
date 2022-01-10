@@ -11,7 +11,13 @@
 
 #ifndef ANOMALYDETECTOR_H__COMMANDS_H_
 #define ANOMALYDETECTOR_H__COMMANDS_H_
-#include<iostream>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <time.h>
+#include  <iostream>
 #include <string.h>
 #include <fstream>
 #include <vector>
@@ -87,6 +93,51 @@ class CIO: public DefaultIO {
 
 
 
+};
+
+// socket IO
+class SIO: public DefaultIO {
+  int connection;
+ public:
+  SIO(int connection): DefaultIO() {
+    this->connection = connection;
+  }
+  // reads one line from socket
+  string read() override {
+    string userInput="";
+    char c=0;
+    ::read(connection,&c,sizeof(char));
+    while(c!='\n'){
+      userInput+=c;
+      ::read(connection,&c,sizeof(char));
+    }
+    return userInput;
+  }
+
+  void read(float *value) override {
+    string userInput="";
+    char c=0;
+    ::read(connection,&c,sizeof(char));
+    while(c!='\n'){
+      userInput+=c;
+      ::read(connection,&c,sizeof(char));
+    }
+    float tmp;
+    tmp = stof(userInput);
+    *value = tmp;
+    return;
+  }
+
+  // writes one string to user
+  void write(string text) override {
+    ::write(connection,text.c_str(),text.length());
+    ::write(connection,"\n",1);
+  }
+  // writes one float to user
+  void write(float f) override {
+    string str = to_string(f);
+    write(str);
+  }
 };
 
 
