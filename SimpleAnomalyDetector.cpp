@@ -7,14 +7,7 @@
  */
 
 #include "SimpleAnomalyDetector.h"
-#include "minCircle.h"
-//#include "anomaly_detection_util.h"
-//#include "timeseries.h"
-//#include "AnomalyDetector.h"
-#include <vector>
-//#include <string>
-#include <algorithm>
-#include <unordered_set>
+
 
 
 SimpleAnomalyDetector::SimpleAnomalyDetector() {

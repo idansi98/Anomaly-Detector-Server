@@ -5,11 +5,9 @@
  *              206821258 Idan Simai
  *
  */
-//TODO: Add try/catch/exceptions
 
 #include "timeseries.h"
-#include <vector>
-#include <string>
+
 
 
 
@@ -40,7 +38,6 @@ std::vector<std::string> TimeSeries::readLine(bool firstTime) {
         //If empty -> return an empty vector.
         return {};
     }
-    //Std::cout << row << "\n";
     //Separates the line into tokens.
     size_t pos = 0;
     std::string token;

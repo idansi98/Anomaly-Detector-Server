@@ -1,82 +1,84 @@
-
+/*
+ * Server.cpp
+ *
+ * Authors:     206534299 Ido Tziony
+ *              206821258 Idan Simai
+ *
+ *
+ */
 #include "Server.h"
 
-
-
-Server::Server(int port)throw (const char*) {
+// Constructor
+Server::Server(int port) noexcept(false) {
   this->port = port;
+  this->t = 0;
 }
 
-void Server::start(ClientHandler& ch)throw(const char*){
-  //std::ref(ch), port
-  threadInfo ti;
-  ti.port = port;
-  ti.ch = &ch;
-  pthread_create(&this->t,NULL, &admitClients, (void*)&ti);
+// Call admitClients() on a new thread
+void Server::start(ClientHandler& ch) noexcept(false){
+  // Remember port and ClientHandler
+  auto *ti = new threadInfo();
+  ti->port = port;
+  ti->ch = &ch;
+  // Pass them into the pthread
+  pthread_create(&this->t,nullptr, &admitClients, (void*)ti);
 }
 
-void Server::stop(){
+// stops the admitClient thread
+void Server::stop() const{
   pthread_cancel(this->t);
 }
 
-static void testFunc(int signum) {
-  //nothing
+// Refreshes the alarm
+static void refreshAlarm(int signum) {
+  alarm(ALARM_WAIT_LENGTH);
 }
 
-void* Server::admitClients(void * args) {
-  threadInfo *tf = (threadInfo *) args;
+// TCP port setup + the main loop of admitting clients into our server
+[[noreturn]] void* Server::admitClients(void * args) {
+  // unpack values
+  auto *tf = (threadInfo *) args;
   int port = tf->port;
   auto ch = tf->ch;
-
-  struct sockaddr_in address;
+  // free unused args
+  delete (threadInfo *) args;
+  
+  // Create socket
+  struct sockaddr_in address{};
   address.sin_family =AF_INET;
   address.sin_addr.s_addr = INADDR_ANY;
   address.sin_port= htons(port);
 
   // create socket
-  int sockfd = socket(AF_INET,SOCK_STREAM,0);
-  if (sockfd <0) {
-    cout<< "Couldn't get a socket\n";
-  }
-  cout << "created socket\n";
+  int sockFD = socket(AF_INET, SOCK_STREAM, 0);
+  if (sockFD < 0)
+    perror("Couldn't get a socket");
 
-  // bind
-  if(bind(sockfd,(struct sockaddr *) &address, sizeof(address)) < 0) {
-    cout<< "Couldn't bind\n";
-
-  }
-  cout << "binded socket\n";
+  // bind socket
+  if(bind(sockFD, (struct sockaddr *) &address, sizeof(address)) < 0)
+    perror("Couldn't bind");
 
   // listen
-  if (listen(sockfd,4)<0) {
-    cout<< "Couldn't listen\n";
-  }
-  cout << "listenning to socket\n";
+  if (listen(sockFD, 4)<0)
+    perror("Couldn't listen");
 
-  //
+  // set signal
+  signal(SIGALRM, refreshAlarm);
+  // Client accepting loop
   while (true) {
-    struct sockaddr clientaddress;
-    int adress_len;
-    // accept 1 client
-    //TODO: add socket timeout
     int newSocket;
-    signal(SIGALRM, testFunc);
-    //alarm(1);
-    cout << "Now waiting\n";
-
-    if((newSocket = accept(sockfd ,(struct sockaddr*) 0, (socklen_t *) 0))<0) {
-      cout<< "Couldn't accept client\n";
-    }
-    cout << "New user :" <<  to_string(newSocket) << "\n";
-    //alarm(0);
+    // set up a timeout for accepting
+    alarm(ALARM_WAIT_LENGTH);
+    // accept a client
+    if ((newSocket = accept(sockFD , (struct sockaddr*) nullptr, (socklen_t *) nullptr))<0)
+      perror("Couldn't accept client");
+    // handle the client
     ch->handle(newSocket);
   }
-
 }
 
 
 
-Server::~Server() {
-}
+Server::~Server() = default;
 
 

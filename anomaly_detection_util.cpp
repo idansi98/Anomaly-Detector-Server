@@ -9,8 +9,7 @@
  */
 
 #include "anomaly_detection_util.h"
-#include <iostream>
-#include <cmath>
+
 
 // returns the sum of an array of floats
 float sum(const float* x, int size) {

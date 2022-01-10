@@ -9,10 +9,7 @@
  */
 
 #include "minCircle.h"
-#include <algorithm>
-#include <iostream>
-#include <math.h>
-#include <vector>
+
 
 using namespace std;
 

@@ -13,12 +13,13 @@
 #define ANOMALYDETECTOR_H__COMMANDS_H_
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 #include <unistd.h>
-#include <time.h>
-#include  <iostream>
-#include <string.h>
+#include <ctime>
+#include <iostream>
+#include <cstring>
+#include <sstream>
 #include <fstream>
 #include <vector>
 #include <string>
@@ -79,7 +80,6 @@ class CIO: public DefaultIO {
     float tmp;
     cin >> tmp;
     *value = tmp;
-    return;
   }
 
   // writes one string to console
@@ -97,34 +97,40 @@ class CIO: public DefaultIO {
 
 // socket IO
 class SIO: public DefaultIO {
+  // the TCP conversation ID
   int connection;
  public:
-  SIO(int connection): DefaultIO() {
+  // constructor
+  explicit SIO(int connection): DefaultIO() {
     this->connection = connection;
   }
   // reads one line from socket
   string read() override {
-    string userInput="";
+    // String builder
+    std::ostringstream userInput;
+    userInput.str("");
+    // read and build until c= \n
     char c=0;
     ::read(connection,&c,sizeof(char));
     while(c!='\n'){
-      userInput+=c;
+      userInput << c;
       ::read(connection,&c,sizeof(char));
     }
-    return userInput;
+    // return the built string
+    return userInput.str();
   }
-
+  // same as prev. read() but for floats
   void read(float *value) override {
+    // read until \n
     string userInput= read();
+    // convert to float
     float tmp = stof(userInput);
     *value = tmp;
-    return;
-  }
+ }
 
   // writes one string to user
   void write(string text) override {
     ::write(connection,text.c_str(),text.length());
-    ::write(connection,"\n",1);
   }
   // writes one float to user
   void write(float f) override {

@@ -10,6 +10,9 @@
 #ifndef ANOMALY_DETECTOR_ANOMALY_DETECTION_UTIL_H
 #define ANOMALY_DETECTOR_ANOMALY_DETECTION_UTIL_H
 
+#include <iostream>
+#include <cmath>
+
 //Returns the variance of X and Y.
 float var(const float* x, int size);
 //Returns the covariance of X and Y.

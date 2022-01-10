@@ -16,6 +16,7 @@
 #include <string>
 #include <algorithm>
 #include <set>
+#include <unordered_set>
 
 
 struct correlatedFeatures {
