@@ -70,6 +70,7 @@ int initClient(int port)throw (const char*){
   bcopy((char *)server->h_addr,(char *)&serv_addr.sin_addr.s_addr,server->h_length);
 
   serv_addr.sin_port = htons(port);
+  //cout << to_string(serv_addr.sin_addr.s_addr);
   if (connect(serverFD,(struct sockaddr *) &serv_addr,sizeof(serv_addr)) < 0)
     throw "connection problem";
 
@@ -165,12 +166,13 @@ int main(){
   outputFile2+=".txt";
 
   try{
+
     AnomalyDetectionHandler adh;
     Server server(port);
     server.start(adh); // runs on its own thread
     // let's run 2 clients
     clientSide1(port,outputFile1);
-    clientSide2(port,outputFile2);
+    //clientSide2(port,outputFile2);
     server.stop(); // joins the server's thread
   }catch(const char* s){
     cout<<s<<endl;

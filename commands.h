@@ -115,15 +115,8 @@ class SIO: public DefaultIO {
   }
 
   void read(float *value) override {
-    string userInput="";
-    char c=0;
-    ::read(connection,&c,sizeof(char));
-    while(c!='\n'){
-      userInput+=c;
-      ::read(connection,&c,sizeof(char));
-    }
-    float tmp;
-    tmp = stof(userInput);
+    string userInput= read();
+    float tmp = stof(userInput);
     *value = tmp;
     return;
   }
